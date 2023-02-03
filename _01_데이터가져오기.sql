@@ -1,0 +1,13 @@
+-- *은 전체열
+SELECT * FROM departments;
+
+-- 2. 특정열 
+SELECT DEPARTMENT_ID FROM DEPARTMENTS;
+
+-- 3. 
+SELECT DEPARTMENTS_ID AS 부서번호 FROM DEPARTMENTS;
+
+-- 4. 산술 연산자
+SELECT FIRST_NAME 이름, JOB_ID 직책, SALARY 월급 FROM EMPLOYEES;
+
+-- 월급에  100씩 뺀 열
