@@ -96,15 +96,45 @@ SELECT * FROM employees WHERE last_name Like '%b%'; -- 문자열 중간에 b가 포함하�
 SELECT * FROM employees WHERE last_name Like '_____%y'; -- _언더바갯수 이상 y를 포함한 문자들 들고오기
 
 --예제 1 )  employees 테이블에서 job_id 값이 AD를 포함하는 모든  데이터를 조회하세요.
-SELECT * FROM employees WHERE job_id Like '_____%y';
+SELECT * FROM employees WHERE job_id Like '%AD%';
 
 --예제 2) employees 테이블에서 job_id 가 AD를 포함하면서 AD 뒤에 따라오는 문자열이 3자리인 데이터 값을 갖는 직원 정보를 조회하세요.
-
+SELECT * FROM employees WHERE job_id Like 'AD%' AND job_id Like '_____'  ;
+SELECT * FROM employees WHERE job_id Like 'AD%___'  ;
 
 --예제 3) employees 테이블에서 전화번호 뒷자리가 1234로 끝나는 직원 정보를 조회하세요
-
+SELECT * FROM employees WHERE phone_number Like '%1234';
 
 --예제 4) employees 테이블에서 전화번호에 3이 들어가지 않으면서 전화번호 끝자리가 9로 끝나는 직원 정보를 출력하시오.
-
+SELECT * FROM employees WHERE phone_number NOT Like '%3%' AND phone_number LIKE '%9';
 
 --예제 5) employees 테이블에서 job_id 에 MGR 을 포함하거나 , ASST  를 포함하는 직원 정보를 조회하세요.
+SELECT * FROM employees WHERE job_id Like '%MGR%' or job_id Like '%ASST%';
+
+SELECT * From employees where commission_pct is null;
+SELECT * From employees where commission_pct is not null;
+
+-- 예제 ) employees 테이블에서 manager_id가 null 값인 직원 정보를 출력해 보세요.
+SELECT * From employees where manager_id is null;
+
+
+-- ORDER BY 절 열의 오름차순 내림차순 정렬, ORDER은 제일 마지막에 삽입.
+SELECT * FROM employees ORDER BY employee_id DESC;
+
+-- 정렬열이 2개 이상일때 첫번째열 정렬 -> 두번째열 정렬
+SELECT department_id, employee_id, first_name, last_name FROM employees ORDER BY department_id, employee_id DESC;
+
+-- q별칭으로 정렬
+SELECT department_id, last_name, salary*12 연봉 FROM employees ORDER BY 연봉 DESC;
+-- 열의 순서로
+SELECT department_id, last_name, salary*12 연봉 FROM employees ORDER BY 3;
+
+--예제 1) employees 테이블에서 employee_id, first_name, last_name을 출력하고 employee_id를 기준으로 내림차순 정렬하세요.
+SELECT employee_id, first_name, last_name FROM employees ORDER BY employee_id;
+
+--예제 2) employees 테이블에서 job_id 에 CLERK 란 단어가 들어가는 직원들의 salary 가 높은 순으로 정렬하세요.
+SELECT * FROM employees WHERE job_id LIKE '%CLERK%' ORDER BY SALARY DESC;
+
+--예제 3) employees 테이블에서 employee_id (직원번호)가 120에서 150번까지 직원을 부서번호(department_id)가 큰순으로 정렬하고 부서번호가 같을시 월급(salary)이 큰순으로 정렬하라.
+SELECT * FROM employees WHERE employee_id Between 120 AND 150 
+ORDER BY department_id DESC , salary desc;
