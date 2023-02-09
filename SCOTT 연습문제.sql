@@ -51,7 +51,8 @@ WHERE e.empno <= 7698;
 
 --12. 문제) 입사일이 81/04/02 보다 같거나 늦고 82/12/09 보다 같거나 빠른 사원의 이름,월급, 부서번호를 출력하라.
 SELECT  e.ename, e.sal, e.deptno, e.hiredate FROM emp e
-WHERE e.hiredate >= '81/04/02' AND e.hiredate <= ' 82/12/09'  ;
+--WHERE e.hiredate >= '81/04/02' AND e.hiredate <= ' 82/12/09'  ;
+WHERE e.hiredate BETWEEN '81/04/02' AND ' 82/12/09'  ;
 
 -- 13. 문제) 급여가 $1,600보다 크고 $3,000보다 작은 직원의 이름, 직업, 급여를 출력하라.
 SELECT  e.ename, e.job, e.sal FROM emp e
@@ -71,7 +72,8 @@ WHERE  '80/12/31'< e.hiredate AND e.hiredate <'82/01/01';
 
 --17. 문제) 직업이 MANAGER이거나 SALESMAN인 직원의 모든 정보를 출력하라.
 SELECT * FROM emp e
-WHERE  e.job = 'MANAGER' OR e.job = 'SALESMAN';
+--WHERE  e.job = 'MANAGER' OR e.job = 'SALESMAN';
+WHERE  e.job IN ('MANAGER' ,'SALESMAN');
 
 --18. 문제) 부서번호가 20, 30번을 제외한 모든 직원의 이름, 사원번호, 부서번호를 출력하라.
 SELECT e.ename, e.empno, e.deptno FROM emp e
@@ -184,6 +186,6 @@ SELECT e.ename, e.deptno,
    CASE e.deptno  WHEN 10   THEN '총무부'
                 WHEN 20     THEN '개발부'
                 WHEN 30      THEN '영업부'
-                ELSE                '몰라' 
+                
    END "부서명"
 FROM emp e;
