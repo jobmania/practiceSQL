@@ -71,12 +71,49 @@ ORDER BY hire_date;
 --9)각 도시(city)에 있는 모든 부서 직원들의 평균급여를 조회하고자 한다. 
 --평균급여가 가장 낮은 도시부터 도시명(city)과 평균연봉, 해당 도시의 직원수를 출력하시오. 
 --단, 도시에 근무하는 직원이 10명 이상인 곳은 제외하고 조회하시오.
-select * from locations l, departments d, employees e
+SELECT * FROM (
+        select l.city, ROUND(avg(salary)), count(*) EMP_CNT from locations l, departments d, employees e
         where e.department_id=d.department_id
         AND d.location_id=l.location_id
+        GROUP BY l.city
+        ORDER BY ROUND(avg(salary)) ASC
+                    ) WHERE EMP_CNT < 10;
 
-;
+--10) ‘Public Accountant’의 직책(job_title)으로 과거에 근무한 적이 있는 모든
+--사원의 사번과 이름을 출력하시오. 
+--(현재 ‘Public Accountant’의 직책(job_title)으로 근무하는 사원은 고려 하지
+-- 않는다)
+SELECT employee_id, first_name||' '||last_name  FROM employees e
+WHERE employee_id IN (SELECT employee_id FROM job_history WHERE job_id = (SELECT job_id FROM jobs WHERE job_title = 'Public Accountant'));
+
+-- 11)2007년에 입사(hire_date)한 직원들의 사번(employee_id),이름(first_name), 성(last_name), 
+--부서명(department_name)을 조회합니다.  이때, 부서에 배치되지 않은 직원의 경우, ‘<Not Assigned>’로 출력하시오.
+SELECT employee_id, first_name, last_name, NVL(department_name,'<Not Assigned>')  FROM departments d RIGHT JOIN 
+    (SELECT * FROM employees WHERE hire_date >= '07/01/01' AND hire_date < '08/01/01') e 
+ON d.department_id = e.department_id
+ORDER BY employee_id; 
+
+--*12)부서별로 가장 적은 급여를 받고 있는 직원의 이름, 부서이름, 급여를 출력하시오. 
+--이름은 last_name만 출력하며, 부서이름으로 오름차순 정렬하고, 
+--부서가 같은 경우 이름을 기준 으로 오름차순 정렬하여 출력합니다.
+
+SELECT E1.employee_id, e1.last_name, d1.department_name, e1.salary FROM employees e1 JOIN 
+            ( SELECT department_name, MIN(salary) money FROM employees e JOIN departments d ON e.department_id = d.department_id
+            GROUP BY department_name
+             ) d1 
+on e1.salary = d1.money
+ORDER BY department_name ASC, LAST_NAME ASC; 
 
 
+-- 13) EMPLOYEES 테이블에서 급여를 많이 받는 순서대로 조회했을 때
+--   6번째부터 10 번째까지 직원의 last_name, first_name, salary를 조회하는
+--   sql문장을 작성하시오.
 
-
+SELECT last_name, first_name, salary FROM employees
+WHERE salary is not null 
+ORDER BY salary DESC;
+SELECT * FROM (
+        SELECT last_name, first_name, salary FROM employees
+        WHERE salary is not null 
+        ORDER BY salary DESC
+) WHERE ROWNUM BETWEEN 6 AND 10  --- 이거 왜않됨??
